@@ -9,7 +9,7 @@ const hashMap = Object.keys(songHashData)
 
 const hashRegex = /custom_level_(\S*) .*$/;
 
-const convertedFavoritesLevelIds = playerData.localPlayers[0].favoritesLevelIds
+playerData.localPlayers[0].favoritesLevelIds = playerData.localPlayers[0].favoritesLevelIds
   .map(s => {
     if (hashRegex.test(s) === false) return s;
 
@@ -17,16 +17,12 @@ const convertedFavoritesLevelIds = playerData.localPlayers[0].favoritesLevelIds
     return `custom_level_${hashMap[oldHash]}`;
   });
 
-
-const convertedLevelsStatsData = playerData.localPlayers[0].levelsStatsData
+playerData.localPlayers[0].levelsStatsData = playerData.localPlayers[0].levelsStatsData
   .map(s => {
     if (hashRegex.test(s.levelId) === false) return s;
 
     const oldHash = s.levelId.match(hashRegex)[1];
     return { ...s, levelId: `custom_level_${hashMap[oldHash]}` };
   });
-
-playerData.localPlayers[0].favoritesLevelIds = convertedFavoritesLevelIds;
-playerData.localPlayers[0].levelsStatsData = convertedLevelsStatsData;
 
 fs.writeFileSync('./PlayerData.dat', JSON.stringify(playerData), 'utf8');
